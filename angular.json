@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "oath2",
+  "projects": {
+    "oath2": {
+      "projectType": "application",
+      "root": "apps/oath2",
+      "sourceRoot": "apps/oath2/src",
+      "prefix": "nx-nest-oath2",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/oath2",
+            "index": "apps/oath2/src/index.html",
+            "main": "apps/oath2/src/main.ts",
+            "polyfills": "apps/oath2/src/polyfills.ts",
+            "tsConfig": "apps/oath2/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/oath2/src/favicon.ico", "apps/oath2/src/assets"],
+            "styles": ["apps/oath2/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/oath2/src/environments/environment.ts",
+                  "with": "apps/oath2/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "oath2:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "oath2:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "oath2:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/oath2/src/**/*.ts",
+              "apps/oath2/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/oath2"],
+          "options": {
+            "jestConfig": "apps/oath2/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "oath2-e2e": {
+      "root": "apps/oath2-e2e",
+      "sourceRoot": "apps/oath2-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/oath2-e2e/cypress.json",
+            "tsConfig": "apps/oath2-e2e/tsconfig.e2e.json",
+            "devServerTarget": "oath2:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "oath2:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/oath2-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "oath2-api": {
+      "root": "apps/oath2-api",
+      "sourceRoot": "apps/oath2-api/src",
+      "projectType": "application",
+      "prefix": "oath2-api",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/oath2-api",
+            "main": "apps/oath2-api/src/main.ts",
+            "tsConfig": "apps/oath2-api/tsconfig.app.json",
+            "assets": ["apps/oath2-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/oath2-api/src/environments/environment.ts",
+                  "with": "apps/oath2-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "oath2-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/oath2-api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/oath2-api"],
+          "options": {
+            "jestConfig": "apps/oath2-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "authentication": {
+      "projectType": "library",
+      "root": "libs/authentication",
+      "sourceRoot": "libs/authentication/src",
+      "prefix": "nx-nest-oath2",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/authentication/src/**/*.ts",
+              "libs/authentication/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/authentication"],
+          "options": {
+            "jestConfig": "libs/authentication/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  }
+}
