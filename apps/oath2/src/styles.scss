@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import './assets//scss/config/reset.scss';
+
+body {
+  background-color: lighten(black, 20);
+}
+
+* {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
